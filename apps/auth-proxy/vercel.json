@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd ../.. && bun install && turbo build --filter=@saasfly/nextjs",
+  "installCommand": "cd ../.. && bun install",
+  "outputDirectory": "../nextjs/.next"
+}
