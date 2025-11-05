@@ -11,35 +11,25 @@ import { callProcedure } from "@trpc/server";
 import { TRPCErrorResponse } from "@trpc/server/rpc";
 import { cache } from "react";
 import { appRouter } from "../../../../packages/api/src/root";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@saasfly/auth";
 
-type AuthObject = Awaited<ReturnType<typeof auth>>;
-
-export const createTRPCContext = async (opts: {
-  headers: Headers;
-  auth: AuthObject;
-// eslint-disable-next-line @typescript-eslint/require-await
-}) => {
+export const createTRPCContext = cache(async () => {
+  const session = await auth();
   return {
-    userId: opts.auth.userId,
-    ...opts,
+    session,
+    headers: new Headers({
+      cookie: cookies().toString(),
+      "x-trpc-source": "rsc",
+    }),
   };
-};
+});
 
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
  */
-const createContext = cache(async () => {
-  return createTRPCContext({
-    headers: new Headers({
-      cookie: cookies().toString(),
-      "x-trpc-source": "rsc",
-    }),
-    auth: await auth(),
-  });
-});
+const createContext = createTRPCContext;
 
 export const trpc = createTRPCProxyClient<AppRouter>({
   transformer,

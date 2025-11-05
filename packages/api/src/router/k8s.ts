@@ -19,7 +19,7 @@ const k8sClusterDeleteSchema = z.object({
 export const k8sRouter = createTRPCRouter({
   getClusters: protectedProcedure.query(async (opts) => {
     const user = await getCurrentUser();
-    const userId = opts.ctx.userId! as string;
+    const userId = opts.ctx.session.user.id;
     if (!user) {
       return;
     }
@@ -32,7 +32,7 @@ export const k8sRouter = createTRPCRouter({
   createCluster: protectedProcedure
     .input(k8sClusterCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.userId! as string;
+      const userId = ctx.session.user.id;
 
       const user = await getCurrentUser();
       if (!user) {
@@ -78,7 +78,7 @@ export const k8sRouter = createTRPCRouter({
     .input(k8sClusterCreateSchema)
     .mutation(async (opts) => {
       const id = opts.input.id!;
-      const userId = opts.ctx.userId!;
+      const userId = opts.ctx.session.user.id;
       const newName = opts.input.name;
       const newLocation = opts.input.location;
 
@@ -119,7 +119,7 @@ export const k8sRouter = createTRPCRouter({
     .input(k8sClusterDeleteSchema)
     .mutation(async (opts) => {
       const id = opts.input.id;
-      const userId = opts.ctx.userId!;
+      const userId = opts.ctx.session.user.id;
       const cluster = await db
         .selectFrom("K8sClusterConfig")
         .selectAll()

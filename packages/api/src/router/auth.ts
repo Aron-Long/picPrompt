@@ -7,7 +7,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const authRouter = createTRPCRouter({
   mySubscription: protectedProcedure.query(async (opts) => {
     noStore();
-    const userId = opts.ctx.userId as string;
+    const userId = opts.ctx.session.user.id;
     const customer = await db
       .selectFrom("Customer")
       .select(["plan", "stripeCurrentPeriodEnd"])

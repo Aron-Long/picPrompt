@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Saasfly is an enterprise-grade Next.js SaaS boilerplate built with a monorepo architecture using Turborepo. It provides a complete solution for building SaaS applications with authentication (Clerk), payments (Stripe), database (PostgreSQL with Kysely), and internationalization.
+Saasfly is an enterprise-grade Next.js SaaS boilerplate built with a monorepo architecture using Turborepo. It provides a complete solution for building SaaS applications with authentication (NextAuth.js), payments (Stripe), database (PostgreSQL with Kysely), and internationalization.
 
 **Key Technologies:**
 - Next.js 14 with App Directory
-- Clerk for authentication (primary), NextAuth.js available on feature-nextauth branch
+- NextAuth.js for authentication
 - tRPC for type-safe APIs
 - Kysely for type-safe SQL queries (Prisma for schema management only)
 - PostgreSQL database
@@ -145,11 +145,13 @@ bun run clean:workspaces
 
 ### Authentication
 
-**Current (default)**: Clerk
-- Middleware: [apps/nextjs/src/middleware.ts](apps/nextjs/src/middleware.ts) imports from [apps/nextjs/src/utils/clerk.ts](apps/nextjs/src/utils/clerk.ts)
-- Auth context available in tRPC via `auth()` from `@clerk/nextjs/server`
-
-**Alternative**: NextAuth.js implementation available on `feature-nextauth` branch
+**NextAuth.js** (default):
+- Middleware: [apps/nextjs/src/middleware.ts](apps/nextjs/src/middleware.ts) imports from [apps/nextjs/src/utils/nextauth.ts](apps/nextjs/src/utils/nextauth.ts)
+- Configuration: [packages/auth/nextauth.ts](packages/auth/nextauth.ts)
+- Auth context available in tRPC via session object
+- Supports GitHub OAuth and Email (Magic Link) providers
+- Session strategy: JWT
+- Admin access determined by `ADMIN_EMAIL` environment variable
 
 ### App Routing (Next.js App Directory)
 
@@ -195,10 +197,12 @@ api/
 
 **Required variables:**
 - `POSTGRES_URL`: PostgreSQL connection string
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`: Clerk auth
+- `NEXTAUTH_URL`: App URL (e.g., http://localhost:3000)
+- `NEXTAUTH_SECRET`: Secret for JWT encryption (generate with `openssl rand -base64 32`)
+- `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`: GitHub OAuth app credentials
 - `STRIPE_API_KEY`, `STRIPE_WEBHOOK_SECRET`: Stripe integration
 - `NEXT_PUBLIC_STRIPE_*_PRICE_ID`: Stripe product/price IDs
-- `RESEND_API_KEY`, `RESEND_FROM`: Email service
+- `RESEND_API_KEY`, `RESEND_FROM`: Email service for magic links
 
 **Admin access:**
 - Set `ADMIN_EMAIL` to comma-separated list of admin emails
@@ -243,4 +247,5 @@ bun run gen
 - **Database queries**: Always use Kysely, never Prisma Client
 - **Schema changes**: Edit [schema.prisma](packages/db/prisma/schema.prisma) → run `bun db:push`
 - **Workspace dependencies**: Use `workspace:*` protocol for internal packages
-- **NextAuth availability**: The repository has switched to Clerk as default; NextAuth code is on `feature-nextauth` branch
+- **Authentication**: Using NextAuth.js with GitHub OAuth and email magic links
+- **tRPC context**: Access user via `ctx.session.user` in protected procedures

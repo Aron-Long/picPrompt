@@ -38,7 +38,7 @@ export const stripeRouter = createTRPCRouter({
   createSession: protectedProcedure
     .input(z.object({ planId: z.string() }))
     .mutation(async (opts) => {
-      const userId = opts.ctx.userId! as string;
+      const userId = opts.ctx.session.user.id;
       const planId = opts.input.planId;
       const customer = await db
         .selectFrom("Customer")
@@ -114,7 +114,7 @@ export const stripeRouter = createTRPCRouter({
     // .output(Promise<UserSubscriptionPlan>)
     .query(async (opts) => {
       noStore();
-      const userId = opts.ctx.userId! as string;
+      const userId = opts.ctx.session.user.id;
       const custom = await db
         .selectFrom("Customer")
         .select([
