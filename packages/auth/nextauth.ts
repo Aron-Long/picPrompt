@@ -28,23 +28,22 @@ declare module "next-auth" {
   }
 }
 
-export const authOptions: NextAuthOptions = {
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login",
-  },
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  adapter: KyselyAdapter(db),
+const providers = [];
 
-  providers: [
+// Only add GitHub provider if credentials are available
+if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
+  providers.push(
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       httpOptions: { timeout: 15000 },
-    }),
+    })
+  );
+}
+
+// Only add Email provider if Resend is configured
+if (env.RESEND_FROM) {
+  providers.push(
     EmailProvider({
       sendVerificationRequest: async ({ identifier, url }) => {
         const user = await db
@@ -59,7 +58,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           await resend.emails.send({
-            from: env.RESEND_FROM,
+            from: env.RESEND_FROM!,
             to: identifier,
             subject: authSubject,
             react: MagicLinkEmail({
@@ -78,8 +77,22 @@ export const authOptions: NextAuthOptions = {
           console.log(error);
         }
       },
-    }),
-  ],
+    })
+  );
+}
+
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  adapter: KyselyAdapter(db),
+
+  providers,
   callbacks: {
     session({ token, session }) {
       if (token) {
