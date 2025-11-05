@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build ",
+    "build:test": "SKIP_ENV_VALIDATION=true turbo build --filter=@saasfly/nextjs",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo clean",
     "db:push": "cd ./packages/db/ && bun db:push",
