@@ -13,12 +13,13 @@ const publicRoute = [
   "/(\\w{2}/)?docs(.*)",
   "/(\\w{2}/)?blog(.*)",
   "/(\\w{2}/)?pricing(.*)",
+  "/(\\w{2}/)?ai-image(.*)",
   "^/\\w{2}$", // root with locale
 ];
 
 const noNeedProcessRoute = [".*\\.png", ".*\\.jpg", ".*\\.opengraph-image.png"];
 
-const noRedirectRoute = ["/api(.*)", "/trpc(.*)", "/admin"];
+const noRedirectRoute = ["/api(.*)", "/trpc(.*)", "/admin", "/api/coze(.*)"];
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
@@ -104,6 +105,11 @@ export default async function middleware(request: NextRequest) {
   }
   const isWebhooksRoute = request.nextUrl.pathname.startsWith("/api/webhooks/");
   if (isWebhooksRoute) {
+    return NextResponse.next();
+  }
+  // Allow Coze API routes without authentication
+  const isCozeApiRoute = request.nextUrl.pathname.startsWith("/api/coze/");
+  if (isCozeApiRoute) {
     return NextResponse.next();
   }
   const pathname = request.nextUrl.pathname;
