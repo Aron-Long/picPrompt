@@ -231,26 +231,6 @@ export default function ImageToPromptPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm dark:bg-gray-900/80">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <Link href="/zh/ai-image" className="flex items-center space-x-2">
-            <FileImage className="h-8 w-8 text-purple-600" />
-            <span className="text-xl font-bold">ImagePrompt.org</span>
-          </Link>
-          <nav className="hidden space-x-6 md:flex">
-            <Link href="/zh/ai-image" className="text-gray-600 hover:text-gray-900 dark:text-gray-300">
-              首页
-            </Link>
-            <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300">灵感</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300">教程</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300">工具</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-300">定价</a>
-          </nav>
-          <Button variant="outline">登录</Button>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-12">
         {/* Title */}
         <div className="mb-8 text-center">
@@ -477,16 +457,6 @@ export default function ImageToPromptPage() {
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="mt-16 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-12 text-center dark:from-amber-900/20 dark:to-orange-900/20">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-              高精度图片转提示词生成
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              将原始图片转换为提示词，并用 AI 重新生成以查看我们的提示词准确性
-            </p>
           </div>
         </div>
       </div>
