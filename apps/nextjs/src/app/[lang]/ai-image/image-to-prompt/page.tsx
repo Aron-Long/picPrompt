@@ -9,23 +9,23 @@ import { Button } from "@saasfly/ui/button";
 const AI_MODELS = [
   {
     id: "general",
-    name: "通用图像提示词",
-    description: "图像的自然语言描述",
+    name: "General Image Prompt",
+    description: "Natural language description of the image",
   },
   {
     id: "flux",
     name: "Flux",
-    description: "针对最先进的 Flux AI 模型进行优化，简洁的自然语言",
+    description: "Optimized for cutting-edge Flux AI model with concise natural language",
   },
   {
     id: "midjourney",
     name: "Midjourney",
-    description: "为 Midjourney 生成量身定制，包含 Midjourney 参数",
+    description: "Tailored for Midjourney with Midjourney-specific parameters",
   },
   {
     id: "stable-diffusion",
     name: "Stable Diffusion",
-    description: "为 Stable Diffusion 模型格式化",
+    description: "Formatted for Stable Diffusion models",
   },
 ];
 
@@ -36,7 +36,7 @@ export default function ImageToPromptPage() {
   const [activeTab, setActiveTab] = useState<"upload" | "url">("upload");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("中文");
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [imageUrl, setImageUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -64,7 +64,7 @@ export default function ImageToPromptPage() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setImageUrl(""); // 清除 URL
+      setImageUrl(""); // Clear URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -75,26 +75,26 @@ export default function ImageToPromptPage() {
 
   const handleUrlSubmit = async () => {
     if (!imageUrl.trim()) {
-      alert("请输入图片 URL");
+      alert("Please enter an image URL");
       return;
     }
 
     try {
-      // 验证 URL 格式
+      // Validate URL format
       new URL(imageUrl);
 
-      // 从 URL 加载图片
+      // Load image from URL
       const response = await fetch(imageUrl);
       const blob = await response.blob();
 
-      // 转换为 File 对象
+      // Convert to File object
       const file = new File([blob], "image-from-url.jpg", { type: blob.type });
       setSelectedFile(file);
       setImagePreview(imageUrl);
       setShowUrlInput(false);
     } catch (error) {
       console.error("Error loading image from URL:", error);
-      alert("无法加载图片,请检查 URL 是否正确");
+      alert("Failed to load image. Please check if the URL is correct");
     }
   };
 
@@ -105,7 +105,7 @@ export default function ImageToPromptPage() {
     setGeneratedPrompt("");
 
     try {
-      // 第一步: 上传文件到 Coze
+      // Step 1: Upload file to Coze
       const formData = new FormData();
       formData.append("file", selectedFile);
 
@@ -120,12 +120,12 @@ export default function ImageToPromptPage() {
       console.log("Upload response data:", uploadData);
 
       if (!uploadResponse.ok) {
-        throw new Error(uploadData.error || uploadData.message || "文件上传失败");
+        throw new Error(uploadData.error || uploadData.message || "File upload failed");
       }
 
       const fileId = uploadData.file_id;
 
-      // 第二步: 调用工作流生成提示词
+      // Step 2: Call workflow to generate prompt
       const generateResponse = await fetch("/api/coze/generate-prompt", {
         method: "POST",
         headers: {
@@ -134,16 +134,16 @@ export default function ImageToPromptPage() {
         body: JSON.stringify({
           file_id: fileId,
           model_type: selectedModel,
-          lang: selectedLanguage, // 改为 lang 参数
+          lang: selectedLanguage,
         }),
       });
 
       if (!generateResponse.ok) {
         const errorData = await generateResponse.json();
         console.error("Generate prompt error:", errorData);
-        const errorMsg = errorData.error || "生成提示词失败";
-        const detailsMsg = errorData.details ? `\n详情: ${JSON.stringify(errorData.details, null, 2)}` : "";
-        const paramsMsg = errorData.sentParameters ? `\n发送参数: ${JSON.stringify(errorData.sentParameters, null, 2)}` : "";
+        const errorMsg = errorData.error || "Failed to generate prompt";
+        const detailsMsg = errorData.details ? `\nDetails: ${JSON.stringify(errorData.details, null, 2)}` : "";
+        const paramsMsg = errorData.sentParameters ? `\nSent parameters: ${JSON.stringify(errorData.sentParameters, null, 2)}` : "";
         throw new Error(errorMsg + detailsMsg + paramsMsg);
       }
 
@@ -163,9 +163,9 @@ export default function ImageToPromptPage() {
       localStorage.setItem('image-prompt-history', JSON.stringify(updatedHistory));
     } catch (error) {
       console.error("Error generating prompt:", error);
-      const errorMessage = error instanceof Error ? error.message : "生成提示词时出错,请重试。";
-      setGeneratedPrompt(`错误: ${errorMessage}`);
-      alert(`错误: ${errorMessage}`);
+      const errorMessage = error instanceof Error ? error.message : "An error occurred while generating the prompt. Please try again.";
+      setGeneratedPrompt(`Error: ${errorMessage}`);
+      alert(`Error: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
@@ -175,7 +175,7 @@ export default function ImageToPromptPage() {
     if (generatedPrompt) {
       try {
         await navigator.clipboard.writeText(generatedPrompt);
-        alert("提示词已复制到剪贴板!");
+        alert("Prompt copied to clipboard!");
       } catch (error) {
         console.error("Failed to copy:", error);
       }
@@ -199,7 +199,7 @@ export default function ImageToPromptPage() {
   const handleCopyHistoryItem = async (prompt: string) => {
     try {
       await navigator.clipboard.writeText(prompt);
-      alert("提示词已复制到剪贴板!");
+      alert("Prompt copied to clipboard!");
     } catch (error) {
       console.error("Failed to copy:", error);
     }
@@ -212,7 +212,7 @@ export default function ImageToPromptPage() {
   };
 
   const handleClearHistory = () => {
-    if (confirm("确定要清空所有历史记录吗?")) {
+    if (confirm("Are you sure you want to clear all history?")) {
       setHistory([]);
       localStorage.removeItem('image-prompt-history');
     }
@@ -220,7 +220,7 @@ export default function ImageToPromptPage() {
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleString('zh-CN', {
+    return date.toLocaleString('en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -235,10 +235,10 @@ export default function ImageToPromptPage() {
         {/* Title */}
         <div className="mb-8 text-center">
           <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-            免费图片转提示词生成器
+            Free Image to Prompt Generator
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            将图片转换为提示词以生成您自己的图像
+            Convert images into prompts to generate your own images
           </p>
         </div>
 
@@ -258,7 +258,7 @@ export default function ImageToPromptPage() {
                   }`}
                 >
                   <FileImage className="h-5 w-5" />
-                  <span>图片转提示词</span>
+                  <span>Image to Prompt</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("url")}
@@ -268,7 +268,7 @@ export default function ImageToPromptPage() {
                       : "border-transparent text-gray-600 dark:text-gray-400"
                   }`}
                 >
-                  文本转提示词
+                  Text to Prompt
                 </button>
               </div>
 
@@ -277,7 +277,7 @@ export default function ImageToPromptPage() {
                 <div className="mb-4 flex gap-3">
                   <label className="flex-1">
                     <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                      上传图片
+                      Upload Image
                     </Button>
                     <input
                       id="file-upload"
@@ -292,7 +292,7 @@ export default function ImageToPromptPage() {
                     className="flex-1"
                     onClick={() => setShowUrlInput(!showUrlInput)}
                   >
-                    输入图片链接
+                    Enter Image URL
                   </Button>
                 </div>
 
@@ -303,7 +303,7 @@ export default function ImageToPromptPage() {
                       type="url"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      placeholder="输入图片 URL (https://...)"
+                      placeholder="Enter image URL (https://...)"
                       className="flex-1 rounded-lg border border-gray-300 px-4 py-2 dark:border-gray-600 dark:bg-gray-700"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -312,7 +312,7 @@ export default function ImageToPromptPage() {
                       }}
                     />
                     <Button onClick={handleUrlSubmit} className="bg-purple-600 hover:bg-purple-700">
-                      加载
+                      Load
                     </Button>
                   </div>
                 )}
@@ -332,9 +332,9 @@ export default function ImageToPromptPage() {
                       <Upload className="mx-auto h-12 w-12 text-gray-400" />
                       <div>
                         <p className="font-medium text-gray-700 dark:text-gray-300">
-                          上传照片或拖放到此处
+                          Upload photo or drag and drop here
                         </p>
-                        <p className="text-sm text-gray-500">支持 PNG、JPG 或 WEBP 格式，最大 4MB</p>
+                        <p className="text-sm text-gray-500">Supports PNG, JPG or WEBP, max 4MB</p>
                       </div>
                     </div>
                   )}
@@ -343,7 +343,7 @@ export default function ImageToPromptPage() {
 
               {/* AI Model Selection */}
               <div>
-                <h3 className="mb-4 text-lg font-semibold">选择 AI 模型</h3>
+                <h3 className="mb-4 text-lg font-semibold">Select AI Model</h3>
                 <div className="space-y-3">
                   {AI_MODELS.map((model) => (
                     <div
@@ -375,13 +375,13 @@ export default function ImageToPromptPage() {
 
               {/* Language Selection */}
               <div>
-                <label className="mb-2 block text-lg font-semibold">提示词语言</label>
+                <label className="mb-2 block text-lg font-semibold">Prompt Language</label>
                 <select
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
                   className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 dark:border-gray-700 dark:bg-gray-800"
                 >
-                  <option value="中文">中文</option>
+                  <option value="中文">Chinese</option>
                   <option value="英文">English</option>
                 </select>
               </div>
@@ -392,7 +392,7 @@ export default function ImageToPromptPage() {
                 className="w-full bg-purple-600 py-6 text-lg font-semibold hover:bg-purple-700"
                 disabled={!imagePreview || isLoading}
               >
-                {isLoading ? "生成中..." : "生成提示词"}
+                {isLoading ? "Generating..." : "Generate Prompt"}
               </Button>
 
               <Button
@@ -400,7 +400,7 @@ export default function ImageToPromptPage() {
                 variant="link"
                 className="w-full text-purple-600"
               >
-                查看历史记录 {history.length > 0 && `(${history.length})`}
+                View History {history.length > 0 && `(${history.length})`}
               </Button>
             </div>
 
@@ -408,7 +408,7 @@ export default function ImageToPromptPage() {
             <div className="space-y-6">
               {/* Image Preview */}
               <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <h3 className="mb-4 text-lg font-semibold">图片预览</h3>
+                <h3 className="mb-4 text-lg font-semibold">Image Preview</h3>
                 <div className="flex h-64 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
                   {imagePreview ? (
                     <img
@@ -419,7 +419,7 @@ export default function ImageToPromptPage() {
                   ) : (
                     <div className="text-center text-gray-400">
                       <FileImage className="mx-auto mb-2 h-12 w-12" />
-                      <p>您的图片将显示在这里</p>
+                      <p>Your image will appear here</p>
                     </div>
                   )}
                 </div>
@@ -427,13 +427,13 @@ export default function ImageToPromptPage() {
 
               {/* Generated Prompt */}
               <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <h3 className="mb-4 text-lg font-semibold">生成的提示词将显示在这里</h3>
+                <h3 className="mb-4 text-lg font-semibold">Generated prompt will appear here</h3>
                 <div className="min-h-[240px] rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-600 dark:bg-gray-700">
                   {generatedPrompt ? (
                     <p className="text-gray-700 dark:text-gray-300">{generatedPrompt}</p>
                   ) : (
                     <p className="text-gray-400">
-                      上传图片并点击"生成提示词"按钮以查看结果
+                      Upload an image and click "Generate Prompt" to see results
                     </p>
                   )}
                 </div>
@@ -444,14 +444,14 @@ export default function ImageToPromptPage() {
                       className="flex-1"
                       onClick={handleCopyPrompt}
                     >
-                      复制
+                      Copy
                     </Button>
                     <Button
                       variant="outline"
                       className="flex-1"
                       onClick={handleDownloadPrompt}
                     >
-                      下载
+                      Download
                     </Button>
                   </div>
                 )}
@@ -467,7 +467,7 @@ export default function ImageToPromptPage() {
           <div className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white dark:bg-gray-800">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-gray-200 p-6 dark:border-gray-700">
-              <h2 className="text-2xl font-bold">历史记录</h2>
+              <h2 className="text-2xl font-bold">History</h2>
               <div className="flex gap-2">
                 {history.length > 0 && (
                   <Button
@@ -475,7 +475,7 @@ export default function ImageToPromptPage() {
                     variant="outline"
                     className="text-red-600 hover:bg-red-50"
                   >
-                    清空全部
+                    Clear All
                   </Button>
                 )}
                 <Button
@@ -493,8 +493,8 @@ export default function ImageToPromptPage() {
               {history.length === 0 ? (
                 <div className="py-12 text-center text-gray-400">
                   <FileImage className="mx-auto mb-4 h-16 w-16" />
-                  <p className="text-lg">暂无历史记录</p>
-                  <p className="mt-2 text-sm">生成提示词后会自动保存在这里</p>
+                  <p className="text-lg">No history yet</p>
+                  <p className="mt-2 text-sm">Generated prompts will be saved here automatically</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -521,7 +521,7 @@ export default function ImageToPromptPage() {
                             variant="outline"
                             size="sm"
                             className="h-8 w-8 p-0"
-                            title="复制"
+                            title="Copy"
                           >
                             <Copy className="h-4 w-4" />
                           </Button>
@@ -530,7 +530,7 @@ export default function ImageToPromptPage() {
                             variant="outline"
                             size="sm"
                             className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
-                            title="删除"
+                            title="Delete"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
