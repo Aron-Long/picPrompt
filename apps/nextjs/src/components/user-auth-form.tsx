@@ -122,8 +122,11 @@ export function UserAuthForm({
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGoogleLoading(true);
-          signIn("google").catch((error) => {
+          signIn("google", {
+            callbackUrl: searchParams?.get("from") ?? `/${lang}/dashboard`,
+          }).catch((error) => {
             console.error("Google signIn error:", error);
+            setIsGoogleLoading(false);
           });
         }}
         disabled={isLoading || isGoogleLoading}

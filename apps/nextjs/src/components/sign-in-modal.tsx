@@ -30,7 +30,9 @@ export const SignInModal = ({ dict }: { dict: Record<string, string> }) => {
             disabled={signInClicked}
             onClick={() => {
               setSignInClicked(true);
-              signIn("google", { redirect: false })
+              signIn("google", {
+                callbackUrl: window.location.origin + "/zh/dashboard",
+              })
                 .then(() =>
                   setTimeout(() => {
                     signInModal.onClose();
