@@ -22,9 +22,6 @@ export default function AIImagePage() {
               立即试用！
             </Button>
           </Link>
-          <Button size="lg" variant="outline">
-            教程
-          </Button>
         </div>
       </section>
 
