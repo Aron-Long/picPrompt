@@ -70,6 +70,9 @@ export const metadata = {
   },
   metadataBase: new URL("https://show.saasfly.io/"),
   // manifest: `${siteConfig.url}/site.webmanifest`,
+  other: {
+    "baidu-site-verification": "codeva-pP8dIrDc6o",
+  },
 };
 
 export default function RootLayout({
@@ -79,11 +82,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <head />
+      {/*<Suspense>*/}
+      {/*  <PostHogPageview />*/}
+      {/*</Suspense>*/}
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+          fontHeading.variable,
+        )}
+      >
         {/* Baidu Analytics */}
-        <Script
-          id="baidu-analytics"
-          strategy="afterInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               var _hmt = _hmt || [];
@@ -96,17 +107,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      {/*<Suspense>*/}
-      {/*  <PostHogPageview />*/}
-      {/*</Suspense>*/}
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-          fontHeading.variable,
-        )}
-      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
