@@ -9,17 +9,20 @@ export default function AIImagePage() {
       {/* Hero Section */}
       <section className="mb-20 text-center">
         <h1 className="mb-6 text-5xl font-bold md:text-6xl lg:text-7xl">
-          创建更好的 AI 艺术作品
+          Free Image to Prompt Generator
           <br />
-          使用 <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">AI 图像提示词</span>
+          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">AI Image Prompt Creator</span>
         </h1>
-        <p className="mb-8 text-xl text-muted-foreground">
-          激发灵感，增强图像提示词，创作杰作
+        <p className="mb-4 text-xl text-muted-foreground">
+          Transform images into AI prompts instantly with our free image prompt generator
+        </p>
+        <p className="mb-8 text-lg text-muted-foreground max-w-3xl mx-auto">
+          Create perfect prompts for Midjourney, Stable Diffusion, and DALL-E. Our AI-powered prompt generator analyzes your images and generates detailed, accurate prompts in seconds.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link href="/zh/ai-image/image-to-prompt">
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
-              立即试用！
+              Try Image to Prompt Generator Free →
             </Button>
           </Link>
         </div>
@@ -36,9 +39,9 @@ export default function AIImagePage() {
                   <Image className="h-8 w-8 text-purple-600" />
                 </div>
               </div>
-              <h3 className="mb-3 text-xl font-semibold">图片转提示词</h3>
+              <h3 className="mb-3 text-xl font-semibold">Image to Prompt</h3>
               <p className="text-sm text-muted-foreground">
-                将图片转换为提示词，生成您自己的图像
+                Convert any image into detailed AI prompts for image generation
               </p>
             </div>
           </Link>
@@ -50,9 +53,9 @@ export default function AIImagePage() {
                 <Wand2 className="h-8 w-8 text-purple-600" />
               </div>
             </div>
-            <h3 className="mb-3 text-xl font-semibold">魔法增强</h3>
+            <h3 className="mb-3 text-xl font-semibold">Prompt Enhancer</h3>
             <p className="text-sm text-muted-foreground">
-              将简单文本转换为详细、描述性的图像提示词
+              Transform simple text into detailed, descriptive image prompts
             </p>
           </div>
 
@@ -63,9 +66,9 @@ export default function AIImagePage() {
                 <FileText className="h-8 w-8 text-purple-600" />
               </div>
             </div>
-            <h3 className="mb-3 text-xl font-semibold">AI 图像描述</h3>
+            <h3 className="mb-3 text-xl font-semibold">AI Image Analyzer</h3>
             <p className="text-sm text-muted-foreground">
-              让 AI 帮助您详细理解和分析任何图像
+              Let AI help you understand and analyze any image in detail
             </p>
           </div>
 
@@ -76,22 +79,62 @@ export default function AIImagePage() {
                 <Sparkles className="h-8 w-8 text-purple-600" />
               </div>
             </div>
-            <h3 className="mb-3 text-xl font-semibold">AI 图像生成器</h3>
+            <h3 className="mb-3 text-xl font-semibold">AI Image Generator</h3>
             <p className="text-sm text-muted-foreground">
-              使用 AI 将您的图像提示词转换为令人惊叹的视觉效果
+              Turn your image prompts into stunning visuals with AI
             </p>
           </div>
         </div>
       </section>
 
       {/* Bottom Section */}
-      <section className="text-center">
+      <section className="mb-20 text-center">
         <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-          AI 驱动的图像提示词工具
+          AI-Powered Image Prompt Tools
         </h2>
-        <p className="text-lg text-muted-foreground">
-          一套完整的 AI 工具套件，覆盖图像创作的各个方面
+        <p className="text-lg text-muted-foreground mb-8">
+          Complete AI toolkit for all your image creation needs
         </p>
+      </section>
+
+      {/* SEO Content Section */}
+      <section className="mx-auto max-w-4xl">
+        <div className="rounded-2xl bg-card border p-8 shadow-sm">
+          <h2 className="mb-6 text-3xl font-bold">
+            Why Use Our Image to Prompt Generator?
+          </h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p>
+              Our <strong>image to prompt generator</strong> is the perfect tool for artists, designers, and AI enthusiasts who want to create better AI art. Whether you're using Midjourney, Stable Diffusion, or DALL-E, our <strong>image prompt generator</strong> helps you create detailed, accurate prompts from any image.
+            </p>
+
+            <h3 className="mt-8 mb-4 text-2xl font-bold text-foreground">
+              Key Benefits of Our Prompt Generator
+            </h3>
+            <ul className="list-disc pl-6 space-y-2">
+              <li><strong>Free Image to Prompt Conversion:</strong> No subscription required - use our image prompt generator completely free</li>
+              <li><strong>AI-Powered Analysis:</strong> Advanced AI understands your images and creates perfect prompts</li>
+              <li><strong>Multiple AI Models:</strong> Optimized for Midjourney, Stable Diffusion, Flux, and more</li>
+              <li><strong>Instant Results:</strong> Get your image prompts in seconds, not minutes</li>
+              <li><strong>Professional Quality:</strong> Generate prompts that capture every detail of your images</li>
+            </ul>
+
+            <h3 className="mt-8 mb-4 text-2xl font-bold text-foreground">
+              Perfect For
+            </h3>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Digital artists creating AI art with Midjourney or Stable Diffusion</li>
+              <li>Designers needing consistent image generation prompts</li>
+              <li>Content creators looking to replicate or remix existing images</li>
+              <li>AI enthusiasts experimenting with different prompt styles</li>
+              <li>Anyone who wants to understand how to write better image prompts</li>
+            </ul>
+
+            <p className="mt-6">
+              Start using our free <strong>image to prompt generator</strong> today and transform the way you create AI art. Our <strong>prompt generator</strong> makes it easy to go from image to prompt in just a few clicks.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );
