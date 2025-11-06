@@ -29,7 +29,9 @@ export function MainNav({ items, children, params: { lang }, marketing }: MainNa
     <div className="flex gap-6 md:gap-10">
       <div className="flex items-center">
         <Link href={`/${lang}`} className="hidden items-center space-x-2 md:flex">
-          <div className="text-3xl">Saasfly</div>
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            ImagePrompt
+          </h1>
         </Link>
       </div>
 
